@@ -1,63 +1,94 @@
-# Servicio Backend Boilerplate
+Esquema base de datos
+Tabla respuestas:
 
-Este servicio es un backend serverless basado en Express.js, diseñado para ejecutarse en AWS Lambda y localmente usando Serverless Framework.
+Campo Tipo Restricciones
+id INTEGER PRIMARY KEY AUTOINCREMENT
+email TEXT NOT NULL, UNIQUE
+motivacion TEXT Opcional
+lenguaje TEXT NOT NULL, CHECK en ('JavaScript','Python','Java','C#','Otro')
+fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP
 
-## Requisitos previos
+Para correr el servidor hacer los siguientes pasos:
 
-- Node.js 18.x (usa nvm y el archivo `.nvmrc` para seleccionar la versión correcta)
-- npm >= 9
-- [Serverless Framework](https://www.serverless.com/framework/docs/getting-started/)
-- Acceso a AWS CLI (solo para despliegue en la nube)
+1. npm install
+2. npm run build
+3. npm run setup-db
+4. npm run dev
 
-## Instalación
+Con esto quedaria listo el backend y quedaria la base de datos con data de prueba, al hacerle curl o mandar una peticion con postman a http://localhost:4001/dev/backend/api/responses/stats deberia responder lo siguiente:
 
-1. Clona el repositorio y navega a la carpeta del servicio:
+{
+"estadisticas": [
+{
+"lenguaje": "C#",
+"cantidad": 2
+},
+{
+"lenguaje": "Java",
+"cantidad": 2
+},
+{
+"lenguaje": "JavaScript",
+"cantidad": 2
+},
+{
+"lenguaje": "Otro",
+"cantidad": 2
+},
+{
+"lenguaje": "Python",
+"cantidad": 2
+}
+]
+}
 
-   ```sh
-   cd "Prueba Técnica Andain/backend-service"
-   ```
+los endpoints con los datos son los siguientes:
 
-2. Instala la versión correcta de Node.js:
+GET /api/responses/recent
 
-   ```sh
-   nvm install
-   nvm use
-   ```
+{
+"ultimos": [
+{
+"email": "usuario@example.com",
+"fecha_creacion": "2025-06-26 20:14:38",
+"motivacion": "Motivación texto libre"
+},
+...
+]
+}
 
-3. Instala las dependencias:
+GET /api/responses/total
 
-   ```sh
-   npm install
-   ```
+{
+"total": 10
+}
 
-## Ejecución en ambiente de desarrollo
+GET /api/responses/stats
 
-1. Compila el proyecto y ejecuta el entorno offline:
+{
+"estadisticas": [
+{ "lenguaje": "JavaScript", "cantidad": 2 },
+{ "lenguaje": "Python", "cantidad": 2 },
+{ "lenguaje": "Java", "cantidad": 2 },
+{ "lenguaje": "C#", "cantidad": 2 },
+{ "lenguaje": "Otro", "cantidad": 2 }
+]
+}
 
-   ```sh
-   npm run dev
-   ```
+POST /api/responses
 
-2. El servicio estará disponible en:
-   - http://localhost:4001/dev/backend/
-   - http://localhost:4001/dev/backend/endpoint1
-   - http://localhost:4001/dev/backend/endpoint2
+Body del json:
 
-## Probar los endpoints
+{
+"email": "usuario@example.com", (obligatorio, único, formato válido.)
+"motivacion": "Texto opcional", (opcional)
+"lenguaje": "JavaScript" (obligatorio, solo permitido uno de: JavaScript, Python, Java, C#, Otro.)
+}
 
-Puedes probar los endpoints usando `curl`:
+Para correr el frontend hacer los siguientes pasos:
 
-```sh
-curl -i http://localhost:4001/dev/backend/
-curl -i http://localhost:4001/dev/backend/endpoint1
-curl -i http://localhost:4001/dev/backend/endpoint2
-```
+1. npm install
+2. npm run dev
 
-## Variables de entorno
-
-- `BASE_PATH`: Define el path base del servicio. Por defecto es el nombre del servicio.
-
-## Notas
-
-- El runtime configurado para AWS Lambda es `nodejs18.x`.
-- Para cualquier error relacionado con versiones de Node.js, asegúrate de usar la versión especificada en `.nvmrc`.
+Con esto deberia quedar corriendo en frontend en el puerto http://localhost:3000, hay 2 rutas, la primera es la base donde esta el formulario o sea http://localhost:3000/
+y la segunda donde se encuentra el dashboard o sea http://localhost:3000/dashboard

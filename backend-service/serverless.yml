@@ -11,7 +11,7 @@ plugins:
 
 functions:
   api:
-    handler: dist/handler.handler
+    handler: dist/handlers/handler.handler
     events:
       - http:
           path: /${self:service}/{proxy+}

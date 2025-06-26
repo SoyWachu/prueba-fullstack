@@ -3,8 +3,8 @@
     "target": "ES2018",
     "module": "CommonJS",
     "moduleResolution": "node",
-    "outDir": "dist",
     "rootDir": "./src",
+    "outDir": "./dist",
     "strict": true,
     "noEmitOnError": true,
     "allowJs": false,
@@ -14,11 +14,6 @@
     "sourceMap": true,
     "resolveJsonModule": true
   },
-  "include": [
-    "src/**/*"  ],
-  "exclude": [
-    "node_modules",
-    ".serverless",
-    "dist"
-  ]
+  "include": ["src/**/*", "db"],
+  "exclude": ["node_modules", ".serverless", "dist"]
 }
